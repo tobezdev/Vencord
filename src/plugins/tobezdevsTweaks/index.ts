@@ -12,14 +12,24 @@ let style: HTMLStyleElement | null = null;
  * Geneate an equal CSS gradient based on the given colors
  * @param colors The colors
  */
-function generateEquivalentGradient(colors: string[]) {
-	let per = 100 / colors.length;
+function generateEquivalentGradient(colors) {
+	let per = Math.floor(100 / (colors.length - 1));
+	let bonus = 100 - (per * (colors.length - 1));
 	let curr = 0;
 	let str = "linear-gradient(180deg";
 
+	let ind = 0;
 	colors.forEach(color => {
-		str += ", " + color + " " + curr + "%";
+		let to_apply = curr;
+
+		if (ind == colors.length - 1) {
+			to_apply += bonus;
+		}
+
+		str += ", " + color + " " + to_apply + "%";
 		curr += per;
+
+		++ind;
 	});
 
 	return str;
