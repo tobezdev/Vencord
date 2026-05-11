@@ -8,6 +8,23 @@ type MentionFlagPreset = "none" | "disabled" | "bi" | "pan" | "trans" | "lesbian
 
 let style: HTMLStyleElement | null = null;
 
+/**
+ * Geneate an equal CSS gradient based on the given colors
+ * @param colors The colors
+ */
+function generateEquivalentGradient(colors: string[]) {
+	let per = 100 / colors.length;
+	let curr = 0;
+	let str = "linear-gradient(180deg";
+
+	colors.forEach(color => {
+		str += ", " + color + " " + curr + "%";
+		curr += per;
+	});
+
+	return str;
+}
+
 function getMentionGradients(preset: MentionFlagPreset) {
 	switch (preset) {
 		case "pan":
@@ -50,7 +67,7 @@ function getMentionGradients(preset: MentionFlagPreset) {
 		case "femboy": {
 			return {
 				background: "linear-gradient(100deg, rgba(214, 2, 112, 0.26) 0%, rgba(190, 42, 131, 0.24) 28%, rgba(155, 79, 150, 0.22) 50%, rgba(104, 71, 159, 0.24) 72%, rgba(0, 56, 168, 0.26) 100%)",
-				bar: "linear-gradient(180deg, #d460a7 0%, #e4adcd 17%, #ffffff 34%, #57cef8 51%, #ffffff 68%, #e4adcd 85%, #d460a7 100%)"
+				bar: generateEquivalentGradient(["#d460a7", "#e4adcd", "#ffffff", "#57cef8", "#ffffff", "#e4adcd", "#d460a7"])
 			};
 		}
 
