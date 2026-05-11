@@ -97,21 +97,6 @@ span#vc-friendcount {
 `);
     }
 
-    if (settings.store.roundAvatarsAndStatus) {
-        css.push(`
-/* Un-square avatars and online indicators */
-img.avatar_c19a55,
-img.avatar__44b0c,
-svg.svg__2338f > foreignObject > img,
-img.circularImage__1ce5d,
-svg.svg__2338f.mask_a423bd,
-div.wrapper__44b0c::after,
-div.container__1ce5d::after {
-    border-radius: 50% !important;
-}
-`);
-    }
-
     if (settings.store.smoothAnimations) {
         css.push(`
 :root {
@@ -445,12 +430,6 @@ const settings = definePluginSettings({
     scaleFriendCount: {
         type: OptionType.BOOLEAN,
         description: "Scale the online friend count label",
-        default: true,
-        onChange: applyStyle
-    },
-    roundAvatarsAndStatus: {
-        type: OptionType.BOOLEAN,
-        description: "Make avatars and status indicators circular",
         default: true,
         onChange: applyStyle
     },
