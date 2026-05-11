@@ -8,32 +8,6 @@ type MentionFlagPreset = "none" | "disabled" | "bi" | "pan" | "trans" | "lesbian
 
 let style: HTMLStyleElement | null = null;
 
-/**
- * Geneate an equal CSS gradient based on the given colors
- * @param colors The colors
- */
-function generateEquivalentGradient(colors) {
-	let per = Math.floor(100 / (colors.length - 1));
-	let bonus = 100 - (per * (colors.length - 1));
-	let curr = 0;
-	let str = "linear-gradient(180deg";
-
-	let ind = 0;
-	colors.forEach(color => {
-		let to_apply = curr;
-
-		if (ind == colors.length - 1) {
-			to_apply += bonus;
-		}
-
-		str += ", " + color + " " + to_apply + "%";
-		curr += per;
-
-		++ind;
-	});
-
-	return str;
-}
 
 function getMentionGradients(preset: MentionFlagPreset) {
 	switch (preset) {
@@ -91,10 +65,10 @@ function getMentionGradients(preset: MentionFlagPreset) {
 }
 
 function buildCss() {
-	const css: string[] = [];
+    const css: string[] = [];
 
-	if (settings.store.hideAvatarDecorations) {
-		css.push(`
+    if (settings.store.hideAvatarDecorations) {
+        css.push(`
 /* Hide avatar decorations everywhere */
 [class="avatarDecoration"],
 [class*="avatarDecorationContainer"],
@@ -103,28 +77,28 @@ img[class*="avatarDecoration"] {
     display: none !important;
 }
 `);
-	}
+    }
 
-	if (settings.store.scaleReadAllButton) {
-		css.push(`
+    if (settings.store.scaleReadAllButton) {
+        css.push(`
 /* Fix display width of 'read all' button for notifications & unreads */
 button.vc-text-btn-base.vc-text-btn-secondary.vc-ranb-button {
     scale: 0.8;
 }
 `);
-	}
+    }
 
-	if (settings.store.scaleFriendCount) {
-		css.push(`
+    if (settings.store.scaleFriendCount) {
+        css.push(`
 /* Fix display width of online friend count */
 span#vc-friendcount {
     scale: 0.9;
 }
 `);
-	}
+    }
 
-	if (settings.store.roundAvatarsAndStatus) {
-		css.push(`
+    if (settings.store.roundAvatarsAndStatus) {
+        css.push(`
 /* Un-square avatars and online indicators */
 img.avatar_c19a55,
 img.avatar__44b0c,
@@ -136,10 +110,10 @@ div.container__1ce5d::after {
     border-radius: 50% !important;
 }
 `);
-	}
+    }
 
-	if (settings.store.smoothAnimations) {
-		css.push(`
+    if (settings.store.smoothAnimations) {
+        css.push(`
 :root {
     --tbz-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
     --tbz-ease-soft: cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -400,12 +374,12 @@ textarea:focus,
     }
 }
 `);
-	}
+    }
 
-	const mentionReplyFlag = settings.store.mentionReplyFlag as MentionFlagPreset;
+    const mentionReplyFlag = settings.store.mentionReplyFlag as MentionFlagPreset;
 
-	if (mentionReplyFlag === "disabled") {
-		css.push(`
+    if (mentionReplyFlag === "disabled") {
+        css.push(`
 .mentioned__5126c,
 .replying__5126c,
 .mentioned__5126c:hover,
@@ -423,9 +397,9 @@ textarea:focus,
     box-shadow: none !important;
 }
 `);
-	} else if (mentionReplyFlag !== "none") {
-		const { background, bar } = getMentionGradients(mentionReplyFlag);
-		css.push(`
+    } else if (mentionReplyFlag !== "none") {
+        const { background, bar } = getMentionGradients(mentionReplyFlag);
+        css.push(`
 .mentioned__5126c,
 .replying__5126c,
 .mentioned__5126c:hover,
@@ -440,80 +414,81 @@ textarea:focus,
     background: ${bar} !important;
 }
 `);
-	}
+    }
 
-	return css.join("\n");
+    return css.join("\n");
 }
 
 function applyStyle() {
-	const css = buildCss();
+    const css = buildCss();
 
-	if (!style) {
-		style = createAndAppendStyle("", managedStyleRootNode);
-	}
+    if (!style) {
+        style = createAndAppendStyle("", managedStyleRootNode);
+    }
 
-	style!.textContent = css;
+    style!.textContent = css;
 }
 
 const settings = definePluginSettings({
-	hideAvatarDecorations: {
-		type: OptionType.BOOLEAN,
-		description: "Hide avatar decorations everywhere",
-		default: true,
-		onChange: applyStyle
-	},
-	scaleReadAllButton: {
-		type: OptionType.BOOLEAN,
-		description: "Scale the Vencord Read All Notifications button",
-		default: true,
-		onChange: applyStyle
-	},
-	scaleFriendCount: {
-		type: OptionType.BOOLEAN,
-		description: "Scale the online friend count label",
-		default: true,
-		onChange: applyStyle
-	},
-	roundAvatarsAndStatus: {
-		type: OptionType.BOOLEAN,
-		description: "Make avatars and status indicators circular",
-		default: true,
-		onChange: applyStyle
-	},
-	smoothAnimations: {
-		type: OptionType.BOOLEAN,
-		description: "Enable broad smooth animations for Discord UI",
-		default: true,
-		onChange: applyStyle
-	},
-	mentionReplyFlag: {
-		type: OptionType.SELECT,
-		description: "Pride flag gradient preset for mention/reply highlight.",
-		options: [
-			{ label: "None (default highlight)", value: "none", default: true },
-			{ label: "Disabled (remove highlight)", value: "disabled" },
-			{ label: "Pride Rainbow", value: "rainbow" },
-			{ label: "Bisexual", value: "bi" },
-			{ label: "Pansexual", value: "pan" },
-			{ label: "Lesbian", value: "lesbian" },
-			{ label: "Asexual", value: "asexual" },
-			{ label: "Transgender", value: "trans" },
-			{ label: "Non-binary", value: "nonbinary" }
-		],
-		onChange: applyStyle
-	}
+    hideAvatarDecorations: {
+        type: OptionType.BOOLEAN,
+        description: "Hide avatar decorations everywhere",
+        default: true,
+        onChange: applyStyle
+    },
+    scaleReadAllButton: {
+        type: OptionType.BOOLEAN,
+        description: "Scale the Vencord Read All Notifications button",
+        default: true,
+        onChange: applyStyle
+    },
+    scaleFriendCount: {
+        type: OptionType.BOOLEAN,
+        description: "Scale the online friend count label",
+        default: true,
+        onChange: applyStyle
+    },
+    roundAvatarsAndStatus: {
+        type: OptionType.BOOLEAN,
+        description: "Make avatars and status indicators circular",
+        default: true,
+        onChange: applyStyle
+    },
+    smoothAnimations: {
+        type: OptionType.BOOLEAN,
+        description: "Enable broad smooth animations for Discord UI",
+        default: true,
+        onChange: applyStyle
+    },
+    mentionReplyFlag: {
+        type: OptionType.SELECT,
+        description: "Pride flag gradient preset for mention/reply highlight.",
+        options: [
+            { label: "None (default highlight)", value: "none", default: true },
+            { label: "Disabled (remove highlight)", value: "disabled" },
+            { label: "Pride Rainbow", value: "rainbow" },
+            { label: "Bisexual", value: "bi" },
+            { label: "Pansexual", value: "pan" },
+            { label: "Lesbian", value: "lesbian" },
+            { label: "Asexual", value: "asexual" },
+            { label: "Transgender", value: "trans" },
+            { label: "Non-binary", value: "nonbinary" },
+            { label: "Femboy", value: "femboy" }
+        ],
+        onChange: applyStyle
+    }
 });
 
 export default definePlugin({
-	name: "tobezdev's Tweaks",
-	description: "QoL client tweaks with various customisable settings.",
-	authors: [Devs.tobezdev],
-	settings,
-	start() {
-		applyStyle();
-	},
-	stop() {
-		style?.remove();
-		style = null;
-	}
+    name: "tobezdev's Tweaks",
+    description: "QoL client tweaks with various customisable settings.",
+    authors: [Devs.tobezdev],
+    settings,
+    start() {
+        applyStyle();
+    },
+    stop() {
+        style?.remove();
+        style = null;
+    }
 });
