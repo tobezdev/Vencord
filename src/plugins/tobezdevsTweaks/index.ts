@@ -461,7 +461,7 @@ const settings = definePluginSettings({
 export default definePlugin({
     name: "tobezdev's Tweaks",
     description: "QoL client tweaks with various customisable settings.",
-    authors: [Devs.tobezdev],
+    authors: [Devs.tobezdev, Devs.zffutwo],
     settings,
     start() {
         applyStyle();
