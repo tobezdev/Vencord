@@ -4,7 +4,7 @@ import { createAndAppendStyle } from "@utils/css";
 import definePlugin, { OptionType } from "@utils/types";
 import { Devs } from "@utils/constants";
 
-type MentionFlagPreset = "bi" | "pan" | "trans" | "lesbian" | "nonbinary" | "asexual" | "rainbow";
+type MentionFlagPreset = "none" | "disabled" | "bi" | "pan" | "trans" | "lesbian" | "nonbinary" | "asexual" | "rainbow";
 
 let style: HTMLStyleElement | null = null;
 
@@ -41,10 +41,15 @@ function getMentionGradients(preset: MentionFlagPreset) {
                 bar: "linear-gradient(180deg, #e50000 0%, #ff8d00 16%, #ffee00 33%, #028121 50%, #004cff 66%, #770088 84%, #770088 100%)"
             };
         case "bi":
-        default:
             return {
                 background: "linear-gradient(100deg, rgba(214, 2, 112, 0.26) 0%, rgba(190, 42, 131, 0.24) 28%, rgba(155, 79, 150, 0.22) 50%, rgba(104, 71, 159, 0.24) 72%, rgba(0, 56, 168, 0.26) 100%)",
                 bar: "linear-gradient(180deg, #d60270 0%, #bf2a83 30%, #9b4f96 50%, #68479f 72%, #0038a8 100%)"
+            };
+        case "none":
+        default:
+            return {
+                background: "none",
+                bar: "none"
             };
     }
 }
@@ -361,8 +366,29 @@ textarea:focus,
 `);
     }
 
-    if (settings.store.mentionReplyHighlight) {
-        const { background, bar } = getMentionGradients(settings.store.mentionReplyFlag as MentionFlagPreset);
+    const mentionReplyFlag = settings.store.mentionReplyFlag as MentionFlagPreset;
+
+    if (mentionReplyFlag === "disabled") {
+        css.push(`
+.mentioned__5126c,
+.replying__5126c,
+.mentioned__5126c:hover,
+.replying__5126c:hover,
+.mentioned__5126c.selected__5126c,
+.replying__5126c.selected__5126c {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+.mentioned__5126c::before,
+.replying__5126c::before {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+`);
+    } else if (mentionReplyFlag !== "none") {
+        const { background, bar } = getMentionGradients(mentionReplyFlag);
         css.push(`
 .mentioned__5126c,
 .replying__5126c,
@@ -424,17 +450,13 @@ const settings = definePluginSettings({
         default: true,
         onChange: applyStyle
     },
-    mentionReplyHighlight: {
-        type: OptionType.BOOLEAN,
-        description: "Enable custom mention/reply background highlight",
-        default: true,
-        onChange: applyStyle
-    },
     mentionReplyFlag: {
         type: OptionType.SELECT,
-        description: "Pride flag gradient preset for mention/reply highlight",
+        description: "Pride flag gradient preset for mention/reply highlight.",
         options: [
-            { label: "Pride Rainbow", value: "rainbow", default: true },
+            { label: "None (default highlight)", value: "none", default: true },
+            { label: "Disabled (remove highlight)", value: "disabled" },
+            { label: "Pride Rainbow", value: "rainbow" },
             { label: "Bisexual", value: "bi" },
             { label: "Pansexual", value: "pan" },
             { label: "Lesbian", value: "lesbian" },
